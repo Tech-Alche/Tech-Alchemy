@@ -77,6 +77,6 @@ session.commit()
 #results=session.query(Person).filter(Person.ssn.in_(["Bob","Rocky"]))
 
 
-results=session.query(Thing,Person).filter(Thing.owner==Person.ssn).filter(Person.firstname=="Franclin").all()
+results=session.query(Thing,Person).filter(Thing.owner==Person.ssn).filter(Person.firstname=="Rocky").all()
 for r in results:
     print(r)
