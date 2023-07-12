@@ -1,9 +1,12 @@
+#import sqlalchemy
 from sqlalchemy import create_engine,ForeignKey,Column,String,Integer,CHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+#database object
 Base=declarative_base()
 
+#class definition
 class Person(Base):
     __tablename__="people"
 
@@ -37,21 +40,23 @@ class Thing(Base):
         return f"({self.tid}) {self.description} owned by {self.owner}"
 
     
-
+#to create database
 engine=create_engine("sqlite:///mydb.db",echo=True)
 Base.metadata.create_all(bind=engine)
 
+#to create session
 Session=sessionmaker(bind=engine)
 session=Session()
 
-person=Person(241019,"Bob","m",19)
+#create person objects
+person=Person(241019,"Barath","m",19)
 session.add(person)
 session.commit()
 
 
-p1=Person(241027,"Danny","m",26)
-p2=Person(241034,"Rocky","m",42)
-p3=Person(241036,"Creed","m",45)
+p1=Person(241027,"Dhanendran","m",26)
+p2=Person(241034,"Eswar","m",42)
+p3=Person(241036,"Franclin","m",45)
 
 session.add(p1)
 session.add(p2)
@@ -71,12 +76,15 @@ session.add(t4)
 session.add(t5)
 session.commit()
 
-#results=session.query(Person).all()
-#results=session.query(Person).filter(Person.age>25)
-#results=session.query(Person).filter(Person.firstname.like("%n"))
-#results=session.query(Person).filter(Person.ssn.in_(["Bob","Rocky"]))
+#displaying results using query()
 
+results=session.query(Person).all()
+results=session.query(Person).filter(Person.age>25)
+results=session.query(Person).filter(Person.firstname.like("%n"))
+results=session.query(Person).filter(Person.ssn.in_(["Barath","Kausik"]))
+results=session.query(Thing,Person).filter(Thing.owner==Person.ssn).filter(Person.firstname=="Franclin").all()
 
-results=session.query(Thing,Person).filter(Thing.owner==Person.ssn).filter(Person.firstname=="Rocky").all()
+#displaying results
+
 for r in results:
     print(r)
